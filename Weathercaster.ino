@@ -34,7 +34,7 @@ AnimatedGIF gif;
 
                                 // ESP32 40MHz SPI single frame rendering performance
                                 // Note: no DMA performance gain on smaller images or transparent pixel GIFs
-  #define GIF_IMAGE castform   //  No DMA  63 fps, DMA:  71fps
+  #define GIF_IMAGE castform   //   DMA:  71fps
 
 
 #include <SPI.h>
@@ -48,7 +48,7 @@ void set_brightness(uint8_t Value) {
   if (Value < 0 || Value > 100) {
     Serial.println("TFT_SET_BL woeufhwoeiufh");
   } else {
-    analogWrite(13, Value * 3.3);
+    analogWrite(14, Value * 3.3); // io14
   }
 }
 
@@ -84,8 +84,8 @@ void loop()
 #else // Test maximum rendering speed
 void loop()
 {
-  set_brightness(brightness);
-  brightness = (brightness + 1) % 100 ;
+  set_brightness(100);
+//  brightness = (brightness + 1) % 100 ;
   long lTime = micros();
   int iFrames = 0;
 
@@ -96,6 +96,7 @@ void loop()
     {
       // Each loop renders one frame
       iFrames++;
+      delay(20);
       yield();
     }
     gif.close();    
